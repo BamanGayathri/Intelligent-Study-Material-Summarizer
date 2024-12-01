@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IRWS Project</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            
+            padding: 0;
+            background-color: #FA8072;
+        }
+        .container {
+           
+            justify-content: center;
+            width: 80%;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #EDC9AF;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        textarea {
+            width: 98%;
+            height: 200px;
+            margin-bottom: 20px;
+            padding: 10px;
+            font-size: 12px;
+            border: 1px solid #ddd;
+            background-color: #F5F5DC;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #summary {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #F5F5DC;
+            border: 1px solid #ddd;
+            color: #635147;
+        }
+        h1{
+            text-align: center;
+            color: #A5243D;
+        }
+        #buttonclass{
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            margin: 1px 250px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Intelligent Study Material Summarizer</h1>
+        <textarea id="text-input" placeholder="Enter your text material here....."></textarea>
+       <div id="buttonclass"> <button id="summarize-btn">Summarize</button></div>
+        <div id="summary">
+            <h3>Summary:</h3>
+            <p id="summary-text">Your summarized text will appear here.</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('summarize-btn').addEventListener('click', function() {
+            let text = document.getElementById('text-input').value;
+            
+            // Send the text to the Flask backend
+            fetch('/summarize', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'text=' + encodeURIComponent(text)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display the summarized text
+                if (data.summary) {
+                    document.getElementById('summary-text').textContent = data.summary;
+                } else {
+                    document.getElementById('summary-text').textContent = data.error;
+                }  
+              })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>

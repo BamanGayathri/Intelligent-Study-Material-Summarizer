@@ -1,0 +1,4 @@
+the appliaction is executed in visual studio -> import the code folder in vs studio and then
+do
+  npm install i
+then do npm app.py
